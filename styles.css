@@ -1,7 +1,18 @@
 body{
   background-color:pink;
 }
-
+.card-container{
+    margin:20px;
+    padding:10px;
+    background-color:white;
+    text-align:center;
+    border-radius:8px;
+    border-color: blueviolet;
+    border-color : 20px;
+    border-style: solid;
+    display:inline-block;
+    height: 300px;
+}
 .card{
     margin:10px;
     padding:10px;
@@ -23,4 +34,7 @@ body{
 }
 .red{
     color:red;
+}
+.black{
+    color:black;
 }
