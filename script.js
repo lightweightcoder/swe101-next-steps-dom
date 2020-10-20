@@ -1,7 +1,11 @@
 // Global setup 1 ------------------------------------------------
-let playersTurn = 1; // matches with starting instructions
+let playersTurn = 1;
 let player1Card;
 let player2Card;
+
+// array to store cards in players' hands
+const player1Hand = [];
+const player2Hand = [];
 
 const player1Button = document.createElement('button');
 
@@ -12,6 +16,11 @@ const gameInfo = document.createElement('div');
 const cardContainer = document.createElement('div');
 
 const buttonContainer = document.createElement('div');
+
+const player1HandContainer = document.createElement('div');
+player1HandContainer.classList.add('player-hand-container');
+const player2HandContainer = document.createElement('div');
+player2HandContainer.classList.add('player-hand-container');
 
 // Helper functions ------------------------------------------
 // get a random index from an array given it's size
@@ -131,13 +140,11 @@ const player1Click = () => {
   if (playersTurn === 1) {
     player1Card = deck.pop();
 
+    player1Hand.push(player1Card);
+
     const cardElement = makeCardElement(player1Card);
 
-    // since it is player 1's turn, it is a new round
-    // so empty cardContainer
-    cardContainer.innerHTML = '';
-
-    cardContainer.appendChild(cardElement);
+    player1HandContainer.appendChild(cardElement);
 
     // let game know it is 2nd player's turn
     playersTurn = 2;
@@ -149,9 +156,11 @@ const player2Click = () => {
   if (playersTurn === 2) {
     player2Card = deck.pop();
 
+    player2Hand.push(player2Card);
+
     const cardElement = makeCardElement(player2Card);
 
-    cardContainer.appendChild(cardElement);
+    player2HandContainer.appendChild(cardElement);
 
     const playerCardsOutput = `Player 1 drew ${player1Card.name} of ${player1Card.suit}. Player 2 drew ${player2Card.name} of ${player2Card.suit}.`;
 
@@ -170,6 +179,10 @@ const player2Click = () => {
 
 // Game initialization -----------------------------------
 const gameInit = () => {
+  // initialize playerHandContainer functionality
+  cardContainer.appendChild(player1HandContainer);
+  cardContainer.appendChild(player2HandContainer);
+
   // initialize cardContainer functionality
   cardContainer.classList.add('card-container');
   document.body.appendChild(cardContainer);

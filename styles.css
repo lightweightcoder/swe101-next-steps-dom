@@ -10,8 +10,6 @@ body{
     border-color : 20px;
     border-style: solid;
     display:inline-block;
-    height: 100px;
-    width: 200px
 }
 .card{
     margin:10px;
@@ -37,4 +35,11 @@ body{
 }
 .black{
     color:black;
+}
+.player-hand-container{
+    margin:10px;
+    padding:15px;
+    background-color:yellowgreen;
+    text-align:center;
+    border-radius:8px;
 }
