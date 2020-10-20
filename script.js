@@ -4,8 +4,8 @@ let player1Card;
 let player2Card;
 let currentRound = 1;
 let playerWon = 'none';
+let canClick = true;
 
-// array to store cards in players' hands
 const player1Hand = [];
 const player2Hand = [];
 
@@ -178,59 +178,75 @@ const deck = shuffleCards(makeDeck());
 
 // Player action callbacks --------------------------------
 const player1Click = () => {
-  if (playersTurn === 1) {
-    player1Card = deck.pop();
+  if (playersTurn === 1 && canClick === true) {
+    canClick = false;
+    output('waiting...');
 
-    player1Hand.push(player1Card);
+    setTimeout(() => {
+      player1Card = deck.pop();
 
-    const cardElement = makeCardElement(player1Card);
+      player1Hand.push(player1Card);
 
-    player1HandContainer.appendChild(cardElement);
+      const cardElement = makeCardElement(player1Card);
 
-    // let game know it is 2nd player's turn
-    playersTurn = 2;
-    output('Its player 2 turn. Click to draw a card!');
+      player1HandContainer.appendChild(cardElement);
+
+      // let game know it is 2nd player's turn
+      playersTurn = 2;
+      output('Its player 2 turn. Click to draw a card!');
+
+      // allow next player to click
+      canClick = true;
+    }, 1000);
   }
 };
 
 const player2Click = () => {
-  if (playersTurn === 2) {
-    player2Card = deck.pop();
+  if (playersTurn === 2 && canClick === true) {
+    canClick = false;
+    output('waiting...');
 
-    player2Hand.push(player2Card);
+    setTimeout(() => {
+      player2Card = deck.pop();
 
-    const cardElement = makeCardElement(player2Card);
+      player2Hand.push(player2Card);
 
-    player2HandContainer.appendChild(cardElement);
+      const cardElement = makeCardElement(player2Card);
 
-    const playerCardsOutput = `Player 1 drew ${player1Card.name} of ${player1Card.suit}. Player 2 drew ${player2Card.name} of ${player2Card.suit}.`;
+      player2HandContainer.appendChild(cardElement);
 
-    const playerWithGreatestDifference = getPlayerWithGreatestDifference();
+      const playerCardsOutput = `Player 1 drew ${player1Card.name} of ${player1Card.suit}. Player 2 drew ${player2Card.name} of ${player2Card.suit}.`;
 
-    playerWon = playerWithGreatestDifference;
+      const playerWithGreatestDifference = getPlayerWithGreatestDifference();
 
-    if (currentRound === 1) {
-      output(`${playerCardsOutput}. Player 1, draw a card to continue playing.`);
-    } else if (playerWon === 'player1') {
-      output(`player 1 wins! <br> 
+      playerWon = playerWithGreatestDifference;
+
+      if (currentRound === 1) {
+        output(`${playerCardsOutput}. Player 1, draw a card to continue playing.`);
+      } else if (playerWon === 'player1') {
+        output(`player 1 wins! <br> 
       ${playerCardsOutput}. <br>
       Player 1 greatest rank difference is ${player1GreatestRankDifference}. <br>
       Player 2 greatest rank difference is ${player2GreatestRankDifference}`);
-    } else if (playerWon === 'player2') {
-      output(`player 2 wins! <br> ${playerCardsOutput}. <br>
+      } else if (playerWon === 'player2') {
+        output(`player 2 wins! <br> ${playerCardsOutput}. <br>
       Player 1 greatest rank difference is ${player1GreatestRankDifference}. <br>
       Player 2 greatest rank difference is ${player2GreatestRankDifference}`);
-    } else if (playerWon === 'none') {
-      output(`tie! <br> ${playerCardsOutput}. <br>
+      } else if (playerWon === 'none') {
+        output(`tie! <br> ${playerCardsOutput}. <br>
       Player 1 greatest rank difference is ${player1GreatestRankDifference}. <br>
       Player 2 greatest rank difference is ${player2GreatestRankDifference}`);
-    } else {
-      output('there is an error with the program. Please refresh to restart the game.');
-    }
+      } else {
+        output('there is an error with the program. Please refresh to restart the game.');
+      }
 
-    // let game know round has ended and start new round
-    playersTurn = 1;
-    currentRound += 1;
+      // let game know round has ended and start new round
+      playersTurn = 1;
+      currentRound += 1;
+
+      // allow next player to click
+      canClick = true;
+    }, 1000);
   }
 };
 
