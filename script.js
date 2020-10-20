@@ -11,6 +11,8 @@ const gameInfo = document.createElement('div');
 
 const cardContainer = document.createElement('div');
 
+const buttonContainer = document.createElement('div');
+
 // Helper functions ------------------------------------------
 // get a random index from an array given it's size
 const getRandomIndex = (size) => Math.floor(Math.random() * size);
@@ -174,10 +176,12 @@ const gameInit = () => {
 
   // initialize button functionality
   player1Button.innerText = 'Player 1 Draw';
-  document.body.appendChild(player1Button);
+  buttonContainer.appendChild(player1Button);
 
   player2Button.innerText = 'Player 2 Draw';
-  document.body.appendChild(player2Button);
+  buttonContainer.appendChild(player2Button);
+
+  document.body.appendChild(buttonContainer);
 
   player1Button.addEventListener('click', player1Click);
   player2Button.addEventListener('click', player2Click);

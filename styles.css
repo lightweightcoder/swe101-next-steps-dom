@@ -2,8 +2,7 @@ body{
   background-color:pink;
 }
 .card-container{
-    margin:20px;
-    padding:10px;
+    padding:50px 20px;
     background-color:white;
     text-align:center;
     border-radius:8px;
@@ -11,7 +10,8 @@ body{
     border-color : 20px;
     border-style: solid;
     display:inline-block;
-    height: 300px;
+    height: 100px;
+    width: 200px
 }
 .card{
     margin:10px;
