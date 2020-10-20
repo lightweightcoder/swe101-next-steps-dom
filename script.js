@@ -2,10 +2,15 @@
 let playersTurn = 1;
 let player1Card;
 let player2Card;
+let currentRound = 1;
+let playerWon = 'none';
 
 // array to store cards in players' hands
 const player1Hand = [];
 const player2Hand = [];
+
+let player1GreatestRankDifference;
+let player2GreatestRankDifference;
 
 const player1Button = document.createElement('button');
 
@@ -132,7 +137,43 @@ const makeCardElement = (cardInfo) => {
   return card;
 };
 
-// Global setup 2: variables that cant be initilized in GLobal setup 1---
+// function to calculate greatest difference between 2 cards in hand
+const getGreatestRankDifference = (hand) => {
+  let highestCardRank = 0;
+  let lowestCardRank = 0;
+  for (let i = 0; i < hand.length; i += 1) {
+    // make the 1st card in hand the lowest and highest card rank
+    if (i === 0) {
+      lowestCardRank = hand[0].rank;
+      highestCardRank = hand[0].rank;
+    } else if (hand[i].rank > highestCardRank) {
+      highestCardRank = hand[i].rank;
+    } else if (hand[i].rank < lowestCardRank) {
+      lowestCardRank = hand[i].rank;
+    }
+  }
+
+  // compare difference between highest and lowest card rank
+  const greatestRankDifference = (highestCardRank - lowestCardRank);
+
+  return greatestRankDifference;
+};
+
+// function to find which player has the greatest difference between 2 cards in hand
+const getPlayerWithGreatestDifference = () => {
+  player1GreatestRankDifference = getGreatestRankDifference(player1Hand);
+  player2GreatestRankDifference = getGreatestRankDifference(player2Hand);
+  let result = 'none';
+
+  if (player1GreatestRankDifference > player2GreatestRankDifference) {
+    result = 'player1';
+  } else if (player2GreatestRankDifference > player1GreatestRankDifference) {
+    result = 'player2';
+  }
+  return result;
+};
+
+// Global setup 2: variables that cant be initilized in GLobal setup 1----
 const deck = shuffleCards(makeDeck());
 
 // Player action callbacks --------------------------------
@@ -164,16 +205,32 @@ const player2Click = () => {
 
     const playerCardsOutput = `Player 1 drew ${player1Card.name} of ${player1Card.suit}. Player 2 drew ${player2Card.name} of ${player2Card.suit}.`;
 
-    if (player1Card.rank > player2Card.rank) {
-      output(`player 1 wins! <br> ${playerCardsOutput}`);
-    } else if (player1Card.rank < player2Card.rank) {
-      output(`player 2 wins! <br> ${playerCardsOutput}`);
+    const playerWithGreatestDifference = getPlayerWithGreatestDifference();
+
+    playerWon = playerWithGreatestDifference;
+
+    if (currentRound === 1) {
+      output(`${playerCardsOutput}. Player 1, draw a card to continue playing.`);
+    } else if (playerWon === 'player1') {
+      output(`player 1 wins! <br> 
+      ${playerCardsOutput}. <br>
+      Player 1 greatest rank difference is ${player1GreatestRankDifference}. <br>
+      Player 2 greatest rank difference is ${player2GreatestRankDifference}`);
+    } else if (playerWon === 'player2') {
+      output(`player 2 wins! <br> ${playerCardsOutput}. <br>
+      Player 1 greatest rank difference is ${player1GreatestRankDifference}. <br>
+      Player 2 greatest rank difference is ${player2GreatestRankDifference}`);
+    } else if (playerWon === 'none') {
+      output(`tie! <br> ${playerCardsOutput}. <br>
+      Player 1 greatest rank difference is ${player1GreatestRankDifference}. <br>
+      Player 2 greatest rank difference is ${player2GreatestRankDifference}`);
     } else {
-      output(`tie! <br> ${playerCardsOutput}`);
+      output('there is an error with the program. Please refresh to restart the game.');
     }
 
     // let game know round has ended and start new round
     playersTurn = 1;
+    currentRound += 1;
   }
 };
 
@@ -196,8 +253,16 @@ const gameInit = () => {
 
   document.body.appendChild(buttonContainer);
 
-  player1Button.addEventListener('click', player1Click);
-  player2Button.addEventListener('click', player2Click);
+  player1Button.addEventListener('click', () => {
+    if (deck.length === 0) {
+      output(`There are no more cards in the deck. ${playerWon} won!`);
+    } else { player1Click(); }
+  });
+  player2Button.addEventListener('click', () => {
+    if (deck.length === 0) {
+      output(`There are no more cards in the deck. ${playerWon} won!`);
+    } else { player2Click(); }
+  });
 
   // initialize game info div with starting instructions
   gameInfo.innerText = 'Its player 1 turn. Click to draw a card!';
